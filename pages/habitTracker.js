@@ -41,14 +41,14 @@ const HabitWrap = styled.div`
 
 let habitData = JSON.parse(JSON.stringify(habitTrackerAPI))
 
-const onHandleChange = (e) => {
-    console.log(1)
-}
-
 function habitTracker() {
     const [habitList, setHabitList] = useState(habitData);
     const [isModal, setIsModal] = useState(false);
-    const [isComplete, setIsComplete] = useState(false);
+
+    const onHandleClick = (habit, idx) => {
+        habit.days[idx].isComplete = !habit.days[idx].isComplete;
+        setHabitList([...habitList])
+    }
     
     return (
         <>
@@ -59,7 +59,7 @@ function habitTracker() {
 			</Header>
             <Container>
                 <HabitWrap>
-					<HabitItem item={habitList} onHandleChange={onHandleChange}/>
+					<HabitItem item={habitList} onHandleClick={onHandleClick}/>
 				</HabitWrap>
             </Container>
         </>

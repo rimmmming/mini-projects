@@ -27,31 +27,11 @@ const ListItem = styled.li`
     display: inline-flex;
     height: 30px;
     vertical-align: top;
-    &:nth-child(7n + 1) Label {
+    &:nth-child(7n + 1) Button {
         border-left: 0;
     }
 `;
-const InputCheckBox = styled.input`
-    -webkit-appearance: none;
-    appearance: none;
-    &:focus + Label{
-        outline: auto 5px -webkit-focus-ring-color;
-    }
-    &:checked + Label{
-        background: #ffff00;
-        color: #999;
-
-        &::after{
-            content: "";
-            position: absolute;
-            width: 1px;
-            height: 60px;
-            transform: rotate(45deg);
-            background-color: #999;
-        }
-    }
-`;
-const Label = styled.label`
+const Button = styled.button`
     position: relative;
 	overflow: hidden;
 	display: flex;
@@ -64,6 +44,19 @@ const Label = styled.label`
 	box-sizing: border-box;
 	font-size: 12px;
 	cursor: pointer;
+    &.active{
+        background: #ffff00;
+        color: #999;
+
+        &::after{
+            content: "";
+            position: absolute;
+            width: 1px;
+            height: 60px;
+            transform: rotate(45deg);
+            background-color: #999;
+        }
+    }
 `;
 const Total = styled.span`
     position: absolute;
@@ -80,12 +73,7 @@ const Total = styled.span`
 	font-size: 12px;
 `;
 
-function HabitItem({item, onHandleChange}) {
-
-    const onChange = (e) => {
-        console.log(2)
-        onHandleChange(e)
-    }
+function HabitItem({item, onHandleClick}) {
     return (
         <>
             {item.map((habit, index) => {
@@ -99,11 +87,10 @@ function HabitItem({item, onHandleChange}) {
                         <HabitContainer>
                             <List>
                                 {days.map((daily, idx) => {
-                                    const {day, isComplate} = daily;
+                                    const {day, isComplete} = daily;
                                     return(
                                         <ListItem key={`daily_${idx}`}>
-                                            <InputCheckBox type="checkbox" onChange={onChange} checked={isComplate ? true : false}/>
-                                            <Label htmlFor="">{day}</Label>
+                                            <Button type='button' className={isComplete && 'active'} onClick={()=>{onHandleClick(habit, idx)}}>{day}</Button>
                                         </ListItem>
                                     )
                                 })}
