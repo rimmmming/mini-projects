@@ -33,6 +33,7 @@ const Container = styled.div`
 const HabitWrap = styled.div``;
 
 // let habitData = JSON.parse(JSON.stringify(habitTrackerAPI))
+// let data = JSON.parse(JSON.stringify(dailyCheckData))
 
 function habitTracker() {
     const [isModal, setIsModal] = useState(false);
@@ -50,8 +51,9 @@ function habitTracker() {
     const onHandleClick = (habit, idx) => {
         habit.days[idx].isComplete = !habit.days[idx].isComplete;
         habit.days[idx].isComplete ? habit.count += 1 : habit.count -= 1
-        setHabitList([...habitList])
-        localStorage.setItem('habitList', JSON.stringify([...habitList]))
+        const newHabits = [...habitList]
+        setHabitList(newHabits)
+        localStorage.setItem('habitList', JSON.stringify(newHabits))
     }
     const onHandleModal = () => {
         setIsModal(true)
@@ -59,7 +61,8 @@ function habitTracker() {
     const onHandleAdd = (title) => {
         setIsModal(false)
         if(!title) return;
-        const newHabits = [...habitList, {title, count:0, ...dailyCheckData }]
+        const data = JSON.parse(JSON.stringify(dailyCheckData))
+        const newHabits = [...habitList, {title, count:0, ...data }]
         setHabitList(newHabits)
         localStorage.setItem('habitList', JSON.stringify(newHabits))
     }
