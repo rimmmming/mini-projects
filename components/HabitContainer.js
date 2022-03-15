@@ -89,7 +89,7 @@ function HabitItem({item, onHandleClick, onHandleDelete}) {
                     <HabitCard key={`habits_${index}`}>
                         <HabitHeader>
                             <HabitTitle>{title}</HabitTitle>
-                            <ButtonClose onClick={()=>{onHandleDelete(habit)}}>X</ButtonClose>
+                            <ButtonClose onClick={()=>{onHandleDelete(index)}}>X</ButtonClose>
                         </HabitHeader>    
                         <HabitContainer>
                             <List>

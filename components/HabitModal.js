@@ -46,12 +46,15 @@ function HabitModal({onHandleAdd}) {
         e.preventDefault();
         onHandleAdd(inputRef.current.value)
     }
+    useEffect(() => {
+        inputRef.current.focus()
+    }, [])
     return (
         <Container>
             <Content>
                 <form onSubmit={onSubmit}>
                     <Title>습관을 입력하세요.</Title>
-                    <Input type="text" ref={inputRef} placeholder='예) 매일 즐겁게 코딩하기' />
+                    <Input type="text" ref={inputRef} placeholder='입력후 엔터를 누르세요' />
                 </form>
             </Content>
             <Dimmed />

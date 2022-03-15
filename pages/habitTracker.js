@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // import habitTrackerAPI from './api/habitData';
 import dailyCheckData from './api/dailyCheckData';
 import styled from 'styled-components';
@@ -66,9 +66,10 @@ function habitTracker() {
         setHabitList(newHabits)
         localStorage.setItem('habitList', JSON.stringify(newHabits))
     }
-    const onHandleDelete = (habit) => {
-        const newHabits = habitList.filter((item) => {
-            return item.title !== habit.title
+    const onHandleDelete = (index) => {
+        const deleteNumber = index;
+        const newHabits = habitList.filter((_, idx) => {
+            return idx !== deleteNumber
         })
         setHabitList(newHabits)
         localStorage.setItem('habitList', JSON.stringify(newHabits))
