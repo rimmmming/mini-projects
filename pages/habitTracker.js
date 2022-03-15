@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import habitTrackerAPI from './api/habitData';
+import React, { useState, useEffect } from 'react';
+// import habitTrackerAPI from './api/habitData';
+import dailyCheckData from './api/dailyCheckData';
 import styled from 'styled-components';
 import HabitItem from '../components/HabitContainer';
 import HabitModal from '../components/HabitModal';
@@ -29,38 +30,56 @@ const ButtonAdd = styled.button`
 const Container = styled.div`
     padding: 30px;
 `;
-const HabitWrap = styled.div`
-    display: inline-block;
-    width: 210px;
-    border: 1px solid #000;
-    & + & {
-        margin-left:20px
-    }
-`;
+const HabitWrap = styled.div``;
 
-
-let habitData = JSON.parse(JSON.stringify(habitTrackerAPI))
+// let habitData = JSON.parse(JSON.stringify(habitTrackerAPI))
 
 function habitTracker() {
-    const [habitList, setHabitList] = useState(habitData);
     const [isModal, setIsModal] = useState(false);
+    const [habitList, setHabitList] = useState(() => {
+        if(typeof window !== 'undefined'){
+            const savedData = window.localStorage.getItem('habitList');
+            if(savedData !== null){
+                return JSON.parse(savedData)
+            }else{
+                return [];
+            }
+        }
+    });
 
     const onHandleClick = (habit, idx) => {
         habit.days[idx].isComplete = !habit.days[idx].isComplete;
+        habit.days[idx].isComplete ? habit.count += 1 : habit.count -= 1
         setHabitList([...habitList])
+        localStorage.setItem('habitList', JSON.stringify([...habitList]))
+    }
+    const onHandleModal = () => {
+        setIsModal(true)
+    }
+    const onHandleAdd = (title) => {
+        setIsModal(false)
+        if(!title) return;
+        const newHabits = [...habitList, {title, count:0, ...dailyCheckData }]
+        setHabitList(newHabits)
+        localStorage.setItem('habitList', JSON.stringify(newHabits))
+    }
+    const onHandleDelete = (habit) => {
+        const newHabits = habitList.filter((item) => {
+            return item.title !== habit.title
+        })
+        setHabitList(newHabits)
+        localStorage.setItem('habitList', JSON.stringify(newHabits))
     }
     
     return (
         <>
             <Header>
 				<Title>Tracker</Title>
-				<ButtonAdd type="button">+</ButtonAdd>
-                {isModal && <HabitModal />}
+				<ButtonAdd type="button" onClick={onHandleModal}>+</ButtonAdd>
+                {isModal && <HabitModal onHandleAdd={onHandleAdd} />}
 			</Header>
             <Container>
-                <HabitWrap>
-					<HabitItem item={habitList} onHandleClick={onHandleClick}/>
-				</HabitWrap>
+                {habitList && <HabitItem item={habitList} onHandleClick={onHandleClick} onHandleDelete={onHandleDelete}/>}
             </Container>
         </>
     );

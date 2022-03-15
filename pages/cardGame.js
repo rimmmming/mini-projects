@@ -40,8 +40,13 @@ const Text = styled.p`
   font-weight:bold;
 `;
 const Button = styled.button`
+  width:80px;
   margin-top:10px;
   padding:5px;
+  border:1px solid #222;
+  &:hover{
+    background-color:#eee
+  }
 `;
 
 function cardShuffle(data) {

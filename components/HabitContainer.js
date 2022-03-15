@@ -1,6 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const HabitCard = styled.div`
+    display: inline-block;
+    width: 210px;
+    margin:10px;
+    border: 1px solid #000;
+`;
+
 const HabitHeader = styled.div`
     position: relative;
     height: 38px;
@@ -73,16 +80,16 @@ const Total = styled.span`
 	font-size: 12px;
 `;
 
-function HabitItem({item, onHandleClick}) {
+function HabitItem({item, onHandleClick, onHandleDelete}) {
     return (
         <>
             {item.map((habit, index) => {
-                const {title, days} = habit;
+                const {title, count, days} = habit;
                 return(
-                    <div key={`habits_${index}`}>
+                    <HabitCard key={`habits_${index}`}>
                         <HabitHeader>
                             <HabitTitle>{title}</HabitTitle>
-                            <ButtonClose>X</ButtonClose>
+                            <ButtonClose onClick={()=>{onHandleDelete(habit)}}>X</ButtonClose>
                         </HabitHeader>    
                         <HabitContainer>
                             <List>
@@ -90,14 +97,14 @@ function HabitItem({item, onHandleClick}) {
                                     const {day, isComplete} = daily;
                                     return(
                                         <ListItem key={`daily_${idx}`}>
-                                            <Button type='button' className={isComplete && 'active'} onClick={()=>{onHandleClick(habit, idx)}}>{day}</Button>
+                                            <Button type='button' className={isComplete && 'active'} onClick={() => {onHandleClick(habit, idx)}}>{day}</Button>
                                         </ListItem>
                                     )
                                 })}
                             </List>
-                            <Total>달성률 : 0%</Total>
+                            <Total>달성률 : {Math.ceil(count/days.length * 100)}%</Total>
                         </HabitContainer>
-                    </div>
+                    </HabitCard>
                 )
             })}
         </>

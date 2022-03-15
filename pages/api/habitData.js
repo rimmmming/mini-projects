@@ -1,6 +1,7 @@
 const habitTrackerAPI = [
     {
       title: '놀기',
+      count: 0,
       days: [
         {
           day: 1,

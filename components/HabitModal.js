@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div``;
@@ -39,13 +39,19 @@ const Dimmed = styled.div`
 `;
 
 
-function HabitModal() {
+function HabitModal({onHandleAdd}) {
+    const inputRef = useRef();
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        onHandleAdd(inputRef.current.value)
+    }
     return (
         <Container>
             <Content>
-                <form action=''>
+                <form onSubmit={onSubmit}>
                     <Title>습관을 입력하세요.</Title>
-                    <Input type="text" placeholder='예) 매일 즐겁게 코딩하기' />
+                    <Input type="text" ref={inputRef} placeholder='예) 매일 즐겁게 코딩하기' />
                 </form>
             </Content>
             <Dimmed />
