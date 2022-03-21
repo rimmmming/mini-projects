@@ -10,6 +10,9 @@ export default function ProjectList() {
                 <li>
                     <Link href="/habitTracker"><a>해빗 트래커</a></Link>
                 </li>
+                <li>
+                    <Link href="/drawingBoard"><a>드로잉 보드</a></Link>
+                </li>
             </ul>
             <style jsx>{`
                 li{
