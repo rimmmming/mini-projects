@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { ReactSketchCanvas, ReactSketchCanvasProps } from 'react-sketch-canvas';
+import { ReactSketchCanvas } from 'react-sketch-canvas';
+import ColorPicker from '../components/ColorPicker';
 
 const styles = {
     height:'calc(100vh - 80px)',
@@ -40,6 +41,16 @@ const Toolbox = styled.div`
 `;
 
 function DrawingBoard(){
+    const [colorState, setColorState] = useState({
+        color: '#ffffff',
+        level: 'OFF',
+    });
+    const [strokeColor, setStrokeColor] = useState('#fff');
+    const [canvasColor, setCanvasColor] = useState('#000');
+    const [isOpen, setIsOpen] = useState(false);
+    useEffect(() => {
+        setStrokeColor(colorState.colorState)
+    },[colorState])
     const canvasEl = useRef(null);
     
     const handleErease = () => {
@@ -57,24 +68,44 @@ function DrawingBoard(){
     const handleRedo = () => {
         canvasEl.current.redo()
     }
+    const handleStrokeColor = () => {
+        setIsOpen(!isOpen)
+    }
+    const handleCanvasColor = () => {
+        setIsOpen(true)
+    }
+    // const createHistory = () => {
+    //     canvasEl.current
+    //     .exportPaths()
+    //     .then((data) => {
+    //         console.log(data);
+    //         setLines(data);
+    //     })
+    //     .catch((e) => {
+    //         console.log(e);
+    //     });
+    // };
 
     return (    
         <>
             <Toolbox>
-                <Button type='button' className='Button__color'>StrokeColor</Button>
-                <Button type='button' className='Button__color'>CanvasColor</Button>
+                <Button type='button' className='Button__color' onClick={handleStrokeColor}>StrokeColor</Button>
+                {/* <Button type='button' className='Button__color' onClick={handleCanvasColor}>CanvasColor</Button> */}
                 <Button type='button' onClick={handleDraw}>Pen</Button>
                 <Button type='button' onClick={handleUndo}>Undo</Button>
                 <Button type='button' onClick={handleRedo}>Redo</Button>
                 <Button type='button' onClick={handleClear}>Clear All</Button>
                 <Button type='button' onClick={handleErease}>Eraser</Button>
+                {
+                    isOpen && <ColorPicker color={setColorState.colorState} onChange={(colorState) => setColorState({ ...colorState, colorState: colorState })} />
+                }
             </Toolbox>
             <ReactSketchCanvas
                 ref={canvasEl}
                 style={styles}
                 strokeWidth={4}
-                strokeColor="red"
-                canvasColor="black"
+                strokeColor={strokeColor}
+                canvasColor={canvasColor}
             />
         </>
     );
